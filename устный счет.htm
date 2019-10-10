@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<title>Устный счёт</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="1.css">
+<script type="text/javascript" src="1.js"></script>
+</head>
+<body onload="defaultLimit()">
+<!-- заголовок -->
+<div class="no-select">
+<ul id="typeCounting" style="display:inline-block;"><li><span id="header" onmouseover="show('выберите нужный тип вычислений.')" onmouseout="hide()">Сложение и вычитание</span>
+<ul><li onclick="javascript:typeCounting(this);">Сложение и вычитание</li>
+<li onclick="javascript:typeCounting(this);">Таблица умножения</li>
+<li onclick="javascript:typeCounting(this);">Умножение и деление</li>
+<li onclick="javascript:typeCounting(this);">Простые уравнения</li></ul></li></ul>
+<div id="typeCounting_double" style="display:none; background:#f8f8f8; cursor:auto; margin:0% 30%; padding:1rem; font-size:200%; color:#000080;"></div><br>
+<div style="font-size:120%; color:#000080; margin:0% 36%;">(до <input id="limit" type="text" value="20" onmouseover="javascript:show('можно ввести другое число')" onmouseout="javascript:hide()" style="border-color:#dcdcdc; border-radius:8px; font-size:100%; width:3em; text-align:center; margin:-5px; display:inline-block;">
+<span id="input" style="display:none; width:3em; text-align:center; margin:-5px;"></span> включительно)</div><br><br>
+
+<!-- кдпв -->
+<img src="img/start.jpg" id="img" width=25% align=right>
+
+<!-- начальная страница -->
+<div id="intro" style="font-size:150%; display:block;">Ну что проверим ваши знания арифметики?<br><br>
+Для запуска тест-программы нажмите кнопку
+<input id="start" type="button" onclick="javascript:typeTest(),getProgress();" value="СТАРТ!" onmouseover="show('Давай, жми скорей!')" onmouseout="hide()" class="btn">
+</div></div>
+
+<!-- кнопка СТОП -->
+<div><input id="stop" type="button" onclick="toIntro();" value="СТОП" onmouseover="show('Тормозим?')" onmouseout="hide()" class="btn" style="display:none;">
+<input id="continue" type="button" onclick="" value="ПРОДОЛЖИТЬ" onmouseover="show('Давай, жми скорей!')" onmouseout="hide()" class="btn" style="display:none;"></div><br><br>
+
+<!-- примеры и ответы для сложения/вычитания и умножения/деления -->
+<div id="test" class="no-select" style="font-size:180%; display:none;">
+Выберите правильный ответ:<br>
+<table width=40% style="font-size:200%; color:#0000ff; margin-left:1em;">
+<tr><td rowspan=5 id="item1"></td><td rowspan=5 id="sign"></td><td rowspan=5 id="item2"></td><td rowspan=5>=</td><td><span id="answer1" onclick="javascript:userAnswers(this);" style="cursor:pointer">0</span></td></tr>
+<tr><td><span id="answer2" onclick="javascript:userAnswers(this);" style="cursor:pointer">0</span></td></tr>
+<tr><td><span id="answer3" onclick="javascript:userAnswers(this);" style="cursor:pointer">0</span></td></tr>
+<tr><td><span id="answer4" onclick="javascript:userAnswers(this);" style="cursor:pointer">0</span></td></tr>
+<tr><td><span id="answer5" onclick="javascript:userAnswers(this);" style="cursor:pointer">0</span></td></tr></table>
+</div>
+
+<!-- примеры и ответы для уравнений -->
+<div id="equation" class="no-select" style="font-size:180%; display:none;">
+<br><br>
+Решите пример:<br><br>
+<div id="example" style="font-size:200%; color:#0000ff;" onmouseover="javascript:show('1. Если есть скобки, раскройте скобки.<br>2. Перенесите все известные величины<br>на одну сторону от знака равенства.<br>Помните, что при переносе через знак<br>равенства меняется знак числа!')" onmouseout="javascript:hide()"></div><br><br>
+<div style="font-size:150%; color:#0000ff;">X = <input id="response" type="text" value="0" onmouseover="javascript:show('кликните внутри мышкой,<br>введите ответ<br>и нажмите клавишу <span class=btn1>Enter</span>')" onmouseout="javascript:hide()" style="border-color:#dcdcdc; border-radius:8px; font-size:100%; width:3em; text-align:center; margin:-5px; display:inline-block;">
+<span id="reaction" style="display:inline-block; width:3em; margin:0em 1em;"></span>
+<input id="testEquation" type="button" onclick="javascript:userAnswers();" value="Проверка" onmouseover="show('при нажатии произойдет проверка вашего ответа')" onmouseout="hide()" class="btn" style="margin-top:-2em;"></div>
+<br><br></div>
+
+
+<!-- прогресс-бар -->
+<div id="count" class="no-select" style="font-size:180%; display:none;">Пример № <span id="counter"></span><br>
+<progress id="progress" max="100" value="0" style="width:100%; height:10px; border-radius:5px;"></progress>
+<span id="note"></span>
+</div>
+
+<!-- всплывающее окно "Прекратите баловаться" -->
+<div id="popup" class="no-select" style="position:fixed; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; background-color:rgba(250, 0, 0, 0.3); z-index:100; display:none;">
+<div style="background-color: #ffffff; padding:3%;">
+<div style="color:#ff0000; font-size:300%; font-weight:400;">Эй-эй! Прекратите баловаться!
+<br><br>
+<input id="close_popup" type="button" onclick="javascript:go_on();" value="Я больше не буду!" onmouseover="show('Давай, жми скорей!')" onmouseout="hide()" class="btn"></div></div></div>
+
+
+<!-- подведение итогов и оценка -->
+<div id="rating" style="font-size:180%; display:none;">
+<br><br>
+Всего решено примеров: <span id="total" style="font-size:150%; color:#0000ff; padding:0em 1em; vertical-align:sub;">0</span><br><br>
+<div class=list>&nbsp;&nbsp;сделано ошибок: <span id="errors" style="font-size:150%; color:#0000ff; padding:0em 1em; vertical-align:sub;">0</span></div><br><br><br>
+Ваша оценка: <span id="score" style="font-size:150%; color:#ff0000; padding:0em 1em;">0</span><br><br>
+
+<div style="position:absolute; top:86%; width:90%;">
+<input id="replay" type="button" onclick="toIntro();" value="Пройдем ещё раз" onmouseover="show('Повторим?')" onmouseout="hide()" class="btn"></div>
+<!--<input id="close" type="button" onclick="javascript:window.close(сложение20.htm);" value="Закрыть" onmouseover="show('Давай, до свидания!')" onmouseout="hide()" style="border-color:#a9a9a9; border-radius:8px; background-color:#e0e0e0; font-weight:400; color:#000000; padding:5px 10px; font-family:Courier New; font-size:24pt; cursor:pointer; position:absolute; right:30px;">-->
+</div>
+
+
+
+
+
+
+
+
+
+<br><br>
+</body></html>
