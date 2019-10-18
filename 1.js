@@ -5,7 +5,8 @@ let count_question=0; // счетчик вопросов
 let count_answers=0;  // счетчик ответов
 let count_prank=0;    // счетчик баловства
 let timer;            // таймер
- // let value            текущее значение таймера
+// сокращение для document.getElementById
+let $ = function(id) {return document.getElementById(id);};
 
 /* // функция запрета работы javascript
 function no_js(event) {
@@ -25,96 +26,101 @@ if (event.stopPropagation) {event.stopPropagation()}
 function typeCounting(answer) {
  // считываем выбранный тип вычислений и показываем его в заголовке
 let typeCount = answer.innerHTML;
-document.getElementById("header").innerHTML = typeCount;
+$("header").innerHTML = typeCount;
  // определяем значение по умолчанию для выбранного типа вычислений
 limit=(typeCount=="Сложение и вычитание")?20:(typeCount=="Таблица умножения")?100:(typeCount=="Умножение и деление")?150:(typeCount=="Простые уравнения")?200:alert("произошла ошибка");
  // и устанавливаем его в поле ввода для числа, ограничивающего счет
-document.getElementById('limit').value = limit;
+$('limit').value = limit;
 }
 
  // функция выбора числа, ограничивающего счет, при разном типе вычислений
 function defaultLimit() {
-typeCount = document.getElementById("header").innerHTML;
+typeCount = $("header").innerHTML;
  // Определяем значение по умолчанию для выбранного типа вычислений
 limit=(typeCount=="Сложение и вычитание")?20:(typeCount=="Таблица умножения")?100:(typeCount=="Умножение и деление")?150:(typeCount=="Простые уравнения")?200:alert("произошла ошибка");
  // и устанавливаем его в поле ввода для числа, ограничивающего счет
-document.getElementById('limit').value = limit;
+$('limit').value = limit;
 }
 
  // функция перехода к началу
 function toIntro() {
  // считываем тип вычисления и ограничитель счета
-typeCount = document.getElementById("typeCounting_double").innerHTML;
-limit = parseInt(document.getElementById('input').innerHTML);
+typeCount = $("typeCounting_double").innerHTML;
+limit = parseInt($('input').innerHTML);
  // очищаем таймер
 clearTimeout(timer);
-document.getElementById('progress').value = 0;
+$('progress').value = 0;
  // скрываем счетчик
-document.getElementById("count").style.display="none";
+$("count").style.display="none";
 count_question--; // уменьшаем счетчик вопросов на единицу
  // заменяем заголовок с простым названием на выбор пунктов
-document.getElementById("typeCounting").style.display="inline-block";
-document.getElementById("typeCounting_double").style.display="none";
+$("typeCounting").style.display="inline-block";
+$("typeCounting_double").style.display="none";
  // скрываем простой текст с уже установленным значением ограничения
  // показываем вместо него поле ввода для значения, ограничивающего счет
-document.getElementById("limit").style.display="inline-block";
-document.getElementById("input").style.display="none";
+$("limit").style.display="inline-block";
+$("input").style.display="none";
  // устанавливаем тип вычисления и ограничитель счета
-document.getElementById("header").innerHTML = typeCount;
-document.getElementById('limit').value = limit;
+$("header").innerHTML = typeCount;
+$('limit').value = limit;
  // возвращаем начальную страницу
-document.getElementById("intro").style.display="block";
-document.getElementById("test").style.display="none";
+$("intro").style.display="block";
+$("test").style.display="none";
  // скрываем страницу с результатами
-document.getElementById("rating").style.display="none";
+$("rating").style.display="none";
 count_question = 0; // обнуляем счетчик вопросов
 count_answers = 0; // обнуляем счетчик ответов
  // скрываем кнопку СТОП
-document.getElementById("stop").style.display="none";
+$("stop").style.display="none";
  // скрываем страницу уравнений
-document.getElementById("equation").style.display="none";
+$("equation").style.display="none";
 }
 
  // функция тип проверки
 function typeTest() {
-document.getElementById("stop").style.display="inline-block";
-let typeTest = document.getElementById("header").innerHTML;
+$("stop").style.display="inline-block";
+let typeTest = $("header").innerHTML;
  // alert(typeTest);
 if (typeTest=="Сложение и вычитание") {testAddition()}
 else if (typeTest=="Таблица умножения") {testMultiplication()}
 else if (typeTest=="Умножение и деление") {testMultiAndDivision()}
-else if (typeTest=="Простые уравнения") {testEquation()}
+else if (typeTest=="Простые уравнения") {testEquation(),
+ // функция нажатия клавиши Enter
+document.addEventListener('keydown', function(event){
+  if(event.keyCode==13) {$('testEquation').click(); return false;}
+})
+}
 else {alert("произошла непредвиденная ошибка");}
 }
 
  // функция перехода к проверке
 function toTest() {
  // получаем число, ограничивающее счет
-limit = parseInt(document.getElementById('limit').value);
+limit = parseInt($('limit').value);
  // заменяем заголовок с выбором пунктов на простое название
-let typeTest = document.getElementById("header").innerHTML;
-document.getElementById("typeCounting").style.display="none";
-document.getElementById("typeCounting_double").innerHTML=typeTest;
-document.getElementById("typeCounting_double").style.display="inline-block";
+let typeTest = $("header").innerHTML;
+$("typeCounting").style.display="none";
+$("typeCounting_double").innerHTML=typeTest;
+$("typeCounting_double").style.display="inline-block";
  // скрываем начальную страницу и показываем страницу с примерами
-document.getElementById("intro").style.display="none";
-if (typeTest =="Простые уравнения"){
-document.getElementById("equation").style.display="block";}
-else {document.getElementById("test").style.display="block";}
+$("intro").style.display="none";
+if (typeTest =="Простые уравнения"){$("equation").style.display="block";}
+else {$("test").style.display="block";}
  // скрываем поле ввода для значения, ограничивающего счет и вместо него
  // показываем простой текст с уже установленным значением
-document.getElementById("limit").style.display="none";
-document.getElementById("input").innerHTML = limit;
-document.getElementById("input").style.display="inline-block";
+$("limit").style.display="none";
+$("input").innerHTML = limit;
+$("input").style.display="inline-block";
  // увеличиваем счетчик вопросов на единицу и показываем номер вопроса
 count_question++;
-document.getElementById("counter").innerHTML = count_question;
+$("counter").innerHTML = count_question;
 }
 
  // функция проверки уравнений
 function testEquation() {
+
  // очищаем поле ввода ответа
-document.getElementById('response').value = "";
+$('response').value = "";
  // вызываем функцию перехода к проверке
 toTest();
  // выбираем переменные
@@ -151,7 +157,7 @@ let tableTypes = [type1, type2, type3, type4, type5, type6, type7, type8, type9,
  // случайным образом выбираем тип уравнения из таблицы
 let typeEquation = tableTypes[Math.floor(Math.random()*20)];
  // показываем уравнение пользователю
-document.getElementById("example").innerHTML = typeEquation;
+$("example").innerHTML = typeEquation;
  // определяем правильный ответ
 correct_answer=(typeEquation==type1||typeEquation==type2)?b+a:
 (typeEquation==type3||typeEquation==type4||typeEquation==type5||typeEquation==type6||typeEquation==type7||typeEquation==type8)?c-a:
@@ -168,21 +174,21 @@ function testMultiAndDivision() {
 toTest();
  // определяем знак выполняемого действия и помещаем его в sign 
 let sign = Math.floor(Math.random()*2) ? '&#215;':':';
-document.getElementById("sign").innerHTML = sign;
+$("sign").innerHTML = sign;
 
  // действия в зависимости от знака - если знак умножения
 if (sign=="&#215;") {
  // определяем случайным образом первый множитель
  // и помещаем его на место, т.е. в item1
 let number1 = Math.floor(Math.random()*(limit+1));
-document.getElementById("item1").innerHTML = number1;
+$("item1").innerHTML = number1;
  // определяем предел чисел, на которые можно умножить первый множитель
  // с учетом того, что произведение не может превышать число, указанное в limit
 let limitMulti = Math.floor(limit/number1);
  // определяем случайным образом второй множитель
  // и помещаем его на место, т.е. в item2
 let number2 = Math.floor(Math.random()*(limitMulti+1));
-document.getElementById("item2").innerHTML = number2;
+$("item2").innerHTML = number2;
  // вычисляем правильный ответ при умножении
 correct_answer = number1*number2;
 }
@@ -199,8 +205,8 @@ let number2 = Math.floor(1+Math.random()*limitDivision);
  // получаем третье число
 let number3 = number1*number2;
  // размещаем числа по местам, т.е. на место делимого и делителя
-document.getElementById("item1").innerHTML = number3;
-document.getElementById("item2").innerHTML = number2;
+$("item1").innerHTML = number3;
+$("item2").innerHTML = number2;
  // определяем правильный ответ
 correct_answer = number1;
 }
@@ -214,14 +220,14 @@ function testMultiplication() {
  // вызываем функцию перехода к проверке
 toTest();
  // помещаем знак выполняемого действия в sign
-document.getElementById("sign").innerHTML = '&#215;';
+$("sign").innerHTML = '&#215;';
 
  // определяем случайным образом множители
  // и помещаем их по местам, т.е. в item1 и в item2
 let number1 = Math.floor(Math.random()*(Math.sqrt(limit)+1));
-document.getElementById("item1").innerHTML = number1;
+$("item1").innerHTML = number1;
 let number2 = Math.floor(Math.random()*(Math.sqrt(limit)+1));
-document.getElementById("item2").innerHTML = number2;
+$("item2").innerHTML = number2;
  // вычисляем правильный ответ при умножении
 correct_answer = number1*number2;
  // создаем неправильные ответы и размещаем все ответы по местам
@@ -237,11 +243,11 @@ toTest();
  // определяем первое число для сложения-вычитания
  // и помещаем его на место, т.е. в item1
 let number1 = Math.floor(Math.random()*(limit+1));
-document.getElementById("item1").innerHTML = number1;
+$("item1").innerHTML = number1;
 
  // определяем знак выполняемого действия и помещаем его в sign
 let sign = Math.floor(Math.random()*2) ? '+':'&#150;';
-document.getElementById("sign").innerHTML = sign;
+$("sign").innerHTML = sign;
 
  // в зависимости от знака действия определяем выбор второго числа
 if (sign=="+") {
@@ -252,7 +258,7 @@ let arr2number = []; // создаем новый пустой массив
 for(let i=0; i<=limit-number1; i++) arr2number.push(i);
  // получаем из этого массива случайное число и устанавливаем его в item2
 let number2 = arr2number[Math.floor(Math.random()*arr2number.length)];
-document.getElementById("item2").innerHTML = number2;
+$("item2").innerHTML = number2;
 
  // вычисляем правильный ответ при сложении
 correct_answer = number1+number2;}
@@ -265,7 +271,7 @@ let arr2number = []; // создаем новый пустой массив
 for(let i=0; i<=number1; i++) arr2number.push(i);
  // получаем из этого массива случайное число и устанавливаем его в item2
 let number2 = arr2number[Math.floor(Math.random()*arr2number.length)];
-document.getElementById("item2").innerHTML = number2;
+$("item2").innerHTML = number2;
 
  // вычисляем правильный ответ при вычитании
 correct_answer = number1-number2;}
@@ -275,8 +281,6 @@ createAnswers();
 
  // функция создания и размещения ответов
 function createAnswers() {
- //
-
  // создаем новый пустой массив для неправильных ответов
 let arr_errAnswers = [];
 
@@ -306,30 +310,23 @@ arr_errAnswers.splice(arr_errAnswers.indexOf(errAnswers4), 1);
 let arrAnswers = [errAnswers1, errAnswers2, errAnswers3, errAnswers4, correct_answer];
  // устанавливаем ответы в случайном порядке по предназначенным местам
 let answer1 = arrAnswers[Math.floor(Math.random()*arrAnswers.length)];
-document.getElementById("answer1").innerHTML = answer1;
+$("answer1").innerHTML = answer1;
  // удаляем из массива установленный ответ
 arrAnswers.splice(arrAnswers.indexOf(answer1), 1);
 let answer2 = arrAnswers[Math.floor(Math.random()*arrAnswers.length)];
-document.getElementById("answer2").innerHTML = answer2;
+$("answer2").innerHTML = answer2;
  // удаляем из массива установленный ответ
 arrAnswers.splice(arrAnswers.indexOf(answer2), 1);
 let answer3 = arrAnswers[Math.floor(Math.random()*arrAnswers.length)];
-document.getElementById("answer3").innerHTML = answer3;
+$("answer3").innerHTML = answer3;
  // удаляем из массива установленный ответ
 arrAnswers.splice(arrAnswers.indexOf(answer3), 1);
 let answer4 = arrAnswers[Math.floor(Math.random()*arrAnswers.length)];
-document.getElementById("answer4").innerHTML = answer4;
+$("answer4").innerHTML = answer4;
  // удаляем из массива установленный ответ
 arrAnswers.splice(arrAnswers.indexOf(answer4), 1);
 let answer5 = arrAnswers[Math.floor(Math.random()*arrAnswers.length)];
-document.getElementById("answer5").innerHTML = answer5;
-}
-
- // функция, сообщающая пользователю о правильном ответе
-function reactionYes(){
-
- // alert(document.getElementById("reaction").innerHTML);
- // clearTimeout(reactionYesTimer);
+$("answer5").innerHTML = answer5;
 }
 
  // ответы пользователя
@@ -338,60 +335,60 @@ function userAnswers(ans){
 count_answers++;
  // увеличиваем счетчик баловства на единицу
 count_prank++;
-if (count_prank==2) {document.getElementById("popup").style.display="flex";}
+if (count_prank>1) {$("popup").style.display="flex";}
  // определяем тип проверки
-let typeTest = document.getElementById("typeCounting_double").innerHTML;
+let typeTest = $("typeCounting_double").innerHTML;
  // считываем число, на котором кликнул пользователь
-let userAnswer = (typeTest=="Простые уравнения")?document.getElementById("response").value:parseInt(ans.innerHTML);
- // document.getElementById("response").innerHTML="верно";
+let userAnswer = (typeTest=="Простые уравнения")?$("response").value:parseInt(ans.innerHTML);
+ // $("response").innerHTML="верно";
 if (userAnswer==correct_answer) {
 if (typeTest=="Сложение и вычитание") {testAddition()}
 else if (typeTest=="Таблица умножения") {testMultiplication()}
 else if (typeTest=="Умножение и деление") {testMultiAndDivision()}
 else if (typeTest=="Простые уравнения") {
  // сообщаем пользователю о правильном ответе
-document.getElementById("reaction").style.color="#00ff00";
-document.getElementById("reaction").innerHTML="верно";
-setTimeout('document.getElementById("reaction").innerHTML=""', 1000);
+$("reaction").style.color="#00ff00";
+$("reaction").innerHTML="верно";
+setTimeout('$("reaction").innerHTML=""', 1000);
 testEquation()}
 else {alert("произошла ошибка")}
 }
 else {
  // сообщаем пользователю о неправильном ответе
-document.getElementById("reaction").style.color="#ff0000";
-document.getElementById("reaction").innerHTML="ошибка";
-setTimeout('document.getElementById("reaction").innerHTML=""', 1000);}
+$("reaction").style.color="#ff0000";
+$("reaction").innerHTML="ошибка";
+setTimeout('$("reaction").innerHTML=""', 1000);}
 }
 
-function go_on(){document.getElementById("popup").style.display="none";}
+
 
 
  // функция прогресс-бара
 function getProgress(){
  // показываем счетчик
-document.getElementById("count").style.display="block";
+$("count").style.display="block";
  // принимаем максимальное значение шкалы прогресс-бара
-let max = (document.getElementById("typeCounting_double").innerHTML=="Простые уравнения")?500:100;
+let max = ($("typeCounting_double").innerHTML=="Простые уравнения")?500:100;
  // устанавливаем максимальное значение шкалы прогресс-бара
-document.getElementById('progress').max=max;
+$('progress').max=max;
  // считываем в коде html текущее значение шкалы прогресс-бара
-let value = document.getElementById('progress').value;
+let value = $('progress').value;
  // действия по окончании установленного времени
 if(value+1>max) {
  // скрываем счетчик
-document.getElementById("count").style.display="none";
+$("count").style.display="none";
  // скрываем страницу с проверкой id=test
-document.getElementById("test").style.display="none";
+$("test").style.display="none";
  // скрываем кнопку СТОП
-document.getElementById("stop").style.display="none";
+$("stop").style.display="none";
  // скрываем страницу уравнений
-document.getElementById("equation").style.display="none";
+$("equation").style.display="none";
  // показываем страницу с итогами проверки id=rating
-document.getElementById("rating").style.display="block";
+$("rating").style.display="block";
  // показываем число выполненных примеров
-document.getElementById("total").innerHTML = count_question-1;
+$("total").innerHTML = count_question-1;
  // показываем число ошибок
-document.getElementById("errors").innerHTML = (count_answers-count_question+1);
+$("errors").innerHTML = (count_answers-count_question+1);
 
  // отношение числа правильных ответов к общему количеству ответов
 let ratio = (count_question-1) / count_answers;
@@ -405,28 +402,28 @@ let fontSizeScore;
 if (score>=4){ fontSizeScore=(count_question<=10)?"50%":(count_question<=20)?"100%":(count_question<=30)?"200%":(count_question<=40)?"300%":"400%";
 }
  // устанавливаем размер шрифта оценки
-document.getElementById("score").style.fontSize = fontSizeScore;
+$("score").style.fontSize = fontSizeScore;
  // показываем полученную оценку
-document.getElementById("score").innerHTML = score;
+$("score").innerHTML = score;
 }
 
  // действия в установленное время
-document.getElementById('progress').value++; // заполнение прогресс-бара
+$('progress').value++; // заполнение прогресс-бара
  // показываем оставшееся время
-document.getElementById("note").innerHTML = 'осталось '+(max-value)+ ' сек';
+$("note").innerHTML = 'осталось '+(max-value)+ ' сек';
  // уменьшаем счетчик баловства на единицу
 count_prank--;
 
  // запуск таймера и установка задержки (шага) таймера в миллисекундах
 let step;
-timer = setTimeout(getProgress,1000);
+timer = setTimeout(getProgress, 1000);
 }
 
 
  // функция удаления всплывающей подсказки по наведению
 function hide(){
-if(!document.getElementById('floatTip'));
-else document.body.removeChild(document.getElementById('floatTip'));}
+if(!$('floatTip'));
+else document.body.removeChild($('floatTip'));}
 
  // функция показа всплывающей подсказки по наведению
 function show(a) {
