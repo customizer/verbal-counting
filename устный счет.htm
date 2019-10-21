@@ -7,8 +7,9 @@
 </head>
 <body onload="defaultLimit()">
 <!-- заголовок -->
-<div class="no-select">
+<div class="no-select"><span style="float:right; text-align:center;"><a href="https://github.com/customizer/verbal-counting" target="_blank"><br>страница<br>проекта<br>на github.com</a></span>
 <ul id="typeCounting" style="display:inline-block;"><li><span id="header" onmouseover="show('выберите нужный тип вычислений.')" onmouseout="hide()">Сложение и вычитание</span>
+
 <ul><li onclick="javascript:typeCounting(this);">Сложение и вычитание</li>
 <li onclick="javascript:typeCounting(this);">Таблица умножения</li>
 <li onclick="javascript:typeCounting(this);">Умножение и деление</li>
@@ -43,9 +44,9 @@
 
 <!-- примеры и ответы для уравнений -->
 <div id="equation" class="no-select" style="font-size:180%; display:none;">
-<br><br>
+<br>
 Решите пример:<br><br>
-<div id="example" style="font-size:200%; color:#0000ff;" onmouseover="javascript:show('1. Если есть скобки, раскройте скобки.<br>2. Перенесите все известные величины<br>на одну сторону от знака равенства.<br>Помните, что при переносе через знак<br>равенства меняется знак числа!')" onmouseout="javascript:hide()"></div><br><br>
+<div id="example" style="width:10em; margin:0em 1em; font-size:200%; color:#0000ff;" onmouseover="javascript:show('1. Если есть скобки, раскройте скобки.<br>2. Перенесите все известные величины<br>на одну сторону от знака равенства.<br>Помните, что при переносе через знак<br>равенства меняется знак числа!')" onmouseout="javascript:hide()"></div><br><br>
 <div style="font-size:150%; color:#0000ff;">X = <input id="response" type="text" value="0" onkeypress="javascript:return (event.charCode==8||event.charCode==0||event.charCode==13)?null:event.charCode>=48&&event.charCode<=57" onmouseover="javascript:show('кликните внутри мышкой, введите ответ<br>и нажмите справа кнопку <span class=btn1>Проверка</span><br>или кнопку <span class=btn1>Enter</span> на клавиатуре')" onmouseout="javascript:hide()" style="border-color:#dcdcdc; border-radius:8px; font-size:100%; width:3em; text-align:center; margin:-5px; display:inline-block;">
 <span id="reaction" style="display:inline-block; width:3em; margin:0em 1em;"></span>
 <input id="testEquation" type="button" onclick="javascript:userAnswers();" value="Проверка" onmouseover="show('при нажатии произойдет проверка вашего ответа')" onmouseout="hide()" class="btn" style="margin-top:-2em;"></div>
